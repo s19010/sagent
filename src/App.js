@@ -1,25 +1,53 @@
 import React from 'react'
-// フォームコンポーネント
-const getJSON = async uri => {
-  const result = await window.fetch(uri).then(res => res.json())
-  return result
-}
 
-export class SimpleForm extends React.Component {
+import request from 'superagent'
+
+class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { value: {} }
+    this.state = {
+      items: []
+    }
   }
 
-  componentDidMount () {
-    getJSON('https://pokeapi.co/api/v2/pokemon/ditto/').then(
-      json => this.state.value
-    )
+  componentWillMount () {
+    request
+      .get('../public/fruits.json')
+      .accept('application/json')
+      .end((err, res) => {
+        this.loadedJSON(err, res)
+      })
+  }
+
+  loadedJSON (err, res) {
+    if (err) {
+      console.log('JSON読み込みエラー')
+      return
+    }
+
+    this.setState({
+      items: res
+    })
   }
 
   render () {
-    console.log()
-    return <div>test</div>
+    if (!this.state.items) {
+      return <div className='App'>現在読み込み中</div>
+    }
+
+    const options = this.state.items.map(e => {
+      return (
+        <option value={e.price} key={e.name}>
+          {e.name}
+        </option>
+      )
+    })
+
+    return (
+      <div className='App'>
+        果物：<select>{options}</select>
+      </div>
+    )
   }
 }
 
