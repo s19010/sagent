@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { value: '' }
+  }
+
+  render () {
+    return (
+      <div>
+        <form onSubmit={e => this.doSubmit(e)}>
+          <input
+            type='text'
+            name='firstname'
+            onChange={e => this.doChange(e)}
+            value={this.state.value}
+          />
+          <input type='submit' />
+        </form>
+      </div>
+    )
+  }
+
+  doChange (e) {
+    this.setState({ value: e.target.value })
+  }
+
+  doSubmit (e) {
+    e.preventDefault()
+    window.alert(this.state.value)
+  }
 }
 
-export default App;
+export default App
